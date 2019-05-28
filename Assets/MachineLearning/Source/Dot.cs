@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Dot
 {
@@ -18,7 +20,7 @@ public class Dot
 
     public Dot()
     {
-        brain = new Brain(1000);
+        brain = new Brain();
 
         pos = new Vector2(161, -170);
         vel = Vector2.zero;
@@ -34,8 +36,16 @@ public class Dot
             brain.step++;
         }
         else
-        {//if at the end of the directions array then the dot is dead
-            dead = true;
+        {
+            Debug.Log("MORE STEPS!");
+            // HAHA THATS LIKE REALY BAD!
+            Array.Resize(ref brain.directions, brain.directions.Length * 2);
+            for (int i = brain.step; i < brain.directions.Length; i++)
+            {
+                brain.directions[i] = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+            }
+            acc = brain.directions[brain.step];
+            brain.step++;
         }
 
         //apply the acceleration and move the dot

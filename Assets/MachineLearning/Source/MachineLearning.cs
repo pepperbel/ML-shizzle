@@ -13,8 +13,9 @@ public class MachineLearning : MonoBehaviour
     Vector2 goal;
     void Start()
     {
-        this.goal = new Vector2(this.gO_goal.transform.position.x, this.gO_goal.transform.position.y);
-        this.population = new Population(this.populationCount);
+        goal = new Vector2(gO_goal.transform.position.x, gO_goal.transform.position.y);
+        population = new Population(populationCount);
+        Debug.Log(population.dots.Length);
     }
 
     void FixedUpdate()
@@ -33,9 +34,9 @@ public class MachineLearning : MonoBehaviour
 
     void Update()
     {
-        foreach(Dot index in this.population.dots)
+        for(int i = 0; i < population.dots.Length; i++)
         {
-            Graphics.DrawMesh(this.mesh, Matrix4x4.TRS(index.pos, Quaternion.identity, Vector3.one * 2), mat, 0);
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(population.dots[i].pos, Quaternion.identity, Vector3.one * 2), mat, 0);
         }
     }
 }

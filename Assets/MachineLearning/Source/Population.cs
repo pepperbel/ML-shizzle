@@ -108,8 +108,8 @@ public class Population
         }
 
         //should never get to this point
-
-        return null;
+        // useless but better than chrash
+        return new Dot();
     }
 
     public void MutateDemBabies()

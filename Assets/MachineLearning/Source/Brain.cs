@@ -8,7 +8,7 @@ public class Brain
     public Vector2[] directions;
     public int step = 0;
 
-    public Brain(int size)
+    public Brain(int size = 1000)
     {
         directions = new Vector2[size];
         Randomize();
@@ -35,7 +35,7 @@ public class Brain
 
     public void Mutate()
     {
-        float mutationRate = 0.01f;//chance that any vector in directions gets changed
+        float mutationRate = 0.1f;//chance that any vector in directions gets changed
         for (int i = 0; i < directions.Length; i++)
         {
             float rand = Random.value;
