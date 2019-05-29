@@ -14,8 +14,7 @@ public class MachineLearning : MonoBehaviour
     void Start()
     {
         goal = new Vector2(gO_goal.transform.position.x, gO_goal.transform.position.y);
-        population = new Population(populationCount);
-        Debug.Log(population.dots.Length);
+        population = new Population(populationCount, goal);
     }
 
     void FixedUpdate()

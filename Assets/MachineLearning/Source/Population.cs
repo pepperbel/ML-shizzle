@@ -14,13 +14,15 @@ public class Population
     private int bestDot = 0;
 
     private int minStep = 1000;
+    Vector2 goal;
 
-    public Population(int size)
+    public Population(int size, Vector2 goal)
     {
+        this.goal = goal;
         dots = new Dot[size];
         for (int i = 0; i < size; i++)
         {
-            dots[i] = new Dot();
+            dots[i] = new Dot(this.goal);
         }
     }
 
@@ -72,10 +74,12 @@ public class Population
         for (int i = 1; i < newDots.Length; i++)
         {
             //select parent based on fitness
-            Dot parent = SelectParent();
+            Dot parent = SelectParent(dots[bestDot].fitness);
 
             //get baby from them
             newDots[i] = parent.GimmeBaby();
+
+            if (parent.reachedGoal) newDots[i].parentReachedGoal = true;
         }
 
         Array.Copy(newDots, dots, newDots.Length);
@@ -91,17 +95,15 @@ public class Population
         }
     }
 
-    Dot SelectParent()
+    Dot SelectParent(float bestfitness)
     {
-        float rand = Random.Range(0, fitnessSum);
+        float rand = Random.Range(bestfitness/2, bestfitness);
+        Debug.Log("FitnessSum::" + fitnessSum + " Rand::" + rand);
 
-
-        float runningSum = 0;
 
         for (int i = 0; i < dots.Length; i++)
         {
-            runningSum += dots[i].fitness;
-            if (runningSum > rand)
+            if (dots[i].fitness > rand)
             {
                 return dots[i];
             }
@@ -109,14 +111,15 @@ public class Population
 
         //should never get to this point
         // useless but better than chrash
-        return new Dot();
+        return new Dot(this.goal);
     }
 
     public void MutateDemBabies()
     {
         for (int i = 1; i < dots.Length; i++)
         {
-            dots[i].brain.Mutate();
+            if(dots[i].parentReachedGoal) dots[i].brain.Mutate(0.01f);
+            else dots[i].brain.Mutate(0.1f);
         }
     }
 
@@ -136,9 +139,9 @@ public class Population
         bestDot = maxIndex;
 
         //if this dot reached the goal then reset the minimum number of steps it takes to get to the goal
-        if (dots[bestDot].reachedGoal)
-        {
-            minStep = dots[bestDot].brain.step;
-        }
+        //if (dots[bestDot].reachedGoal)
+        //{
+        //    minStep = dots[bestDot].brain.step;
+        //}
     }
 }

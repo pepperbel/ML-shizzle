@@ -15,21 +15,26 @@ public class Dot
     public bool dead = false;
     public bool reachedGoal = false;
     public bool isBest = false;
+    public bool parentReachedGoal = false;
 
+    public float smallestDistance = 1000000000;
     public float fitness = 0;
+    public float timeAlive = 0;
 
-    public Dot()
+    public Dot(Vector2 goal)
     {
         brain = new Brain();
 
         pos = new Vector2(161, -170);
         vel = Vector2.zero;
         acc = Vector2.zero;
-        goal = new Vector2(-163.7f, 164.2f);
+        this.goal = goal;
     }
 
     public void Move()
     {
+        float distance = Vector2.Distance(pos, goal);
+        if (distance < smallestDistance) smallestDistance = distance;
         if (brain.directions.Length > brain.step)
         {//if there are still directions left then set the acceleration as the next PVector in the direcitons array
             acc = brain.directions[brain.step];
@@ -58,6 +63,7 @@ public class Dot
     {
         if (!dead && !reachedGoal)
         {
+            timeAlive += Time.deltaTime;
             Move();
             if (pos.x < -200 || pos.y < -200 || pos.x > 200 || pos.y > 200)
             {//if near the edges of the window then kill it 
@@ -65,7 +71,6 @@ public class Dot
             }
             else if (Vector2.Distance(pos, goal) < 5)
             {//if reached goal
-                Debug.Log("Goal");
                 reachedGoal = true;
             }
             else 
@@ -74,10 +79,8 @@ public class Dot
                 if (hit && hit.transform.tag != "Finish")
                 {
                     dead = true;
-                    Debug.Log("Dead");
                 }else if(hit && hit.transform.tag == "Finish")
                 {
-                    Debug.Log("Goal");
                     reachedGoal = true;
                 }
             }
@@ -88,18 +91,19 @@ public class Dot
     {
         if (reachedGoal)
         {//if the dot reached the goal then the fitness is based on the amount of steps it took to get there
-            fitness = 1.0f / 16.0f + 10000.0f / (float)(brain.step * brain.step);
+            fitness = 1.0f / (2.0f * timeAlive) + 10000.0f / (float)(brain.step * brain.step);
         }
         else
         {//if the dot didn't reach the goal then the fitness is based on how close it is to the goal
             float distanceToGoal = Vector2.Distance(pos, goal);
-            fitness = 1.0f / (distanceToGoal * distanceToGoal);
+            fitness = 1.0f / 16.0f + ((1/smallestDistance) + (timeAlive)) / (distanceToGoal * distanceToGoal * distanceToGoal);
         }
+        timeAlive = 0f;
     }
 
     public Dot GimmeBaby()
     {
-        Dot baby = new Dot();
+        Dot baby = new Dot(this.goal);
         baby.brain = brain.Clone();//babies have the same brain as their parents
         return baby;
     }

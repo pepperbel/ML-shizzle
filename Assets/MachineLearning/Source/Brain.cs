@@ -33,9 +33,8 @@ public class Brain
         return clone;
     }
 
-    public void Mutate()
+    public void Mutate(float mutationRate)
     {
-        float mutationRate = 0.1f;//chance that any vector in directions gets changed
         for (int i = 0; i < directions.Length; i++)
         {
             float rand = Random.value;
