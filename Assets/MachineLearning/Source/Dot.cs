@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Dot
-{
+public class Dot {
     public Vector2 pos;
     private Vector2 vel;
     private Vector2 acc;
@@ -21,8 +20,12 @@ public class Dot
     public float fitness = 0;
     public float timeAlive = 0;
 
-    public Dot(Vector2 goal)
-    {
+    public int lastStepIndex = 0;
+    public int pLastStepIndex {
+        get { return lastStepIndex; }
+        set { lastStepIndex = value; }
+    }
+    public Dot(Vector2 goal) {
         brain = new Brain();
 
         pos = new Vector2(161, -170);
@@ -31,22 +34,18 @@ public class Dot
         this.goal = goal;
     }
 
-    public void Move()
-    {
+    public void Move() {
         float distance = Vector2.Distance(pos, goal);
         if (distance < smallestDistance) smallestDistance = distance;
-        if (brain.directions.Length > brain.step)
-        {//if there are still directions left then set the acceleration as the next PVector in the direcitons array
+        if (brain.directions.Length > brain.step) {//if there are still directions left then set the acceleration as the next PVector in the direcitons array
             acc = brain.directions[brain.step];
             brain.step++;
         }
-        else
-        {
+        else {
             Debug.Log("MORE STEPS!");
             // HAHA THATS LIKE REALY BAD!
             Array.Resize(ref brain.directions, brain.directions.Length * 2);
-            for (int i = brain.step; i < brain.directions.Length; i++)
-            {
+            for (int i = brain.step; i < brain.directions.Length; i++) {
                 brain.directions[i] = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
             }
             acc = brain.directions[brain.step];
@@ -59,50 +58,44 @@ public class Dot
         pos += vel;
     }
 
-    public void Update()
-    {
-        if (!dead && !reachedGoal)
-        {
+    public void Update() {
+        if (!dead && !reachedGoal) {
             timeAlive += Time.deltaTime;
             Move();
-            if (pos.x < -200 || pos.y < -200 || pos.x > 200 || pos.y > 200)
-            {//if near the edges of the window then kill it 
+            if (pos.x < -200 || pos.y < -200 || pos.x > 200 || pos.y > 200) {//if near the edges of the window then kill it 
+                pLastStepIndex = brain.step;
                 dead = true;
             }
-            else if (Vector2.Distance(pos, goal) < 5)
-            {//if reached goal
+            else if (Vector2.Distance(pos, goal) < 5) {//if reached goal
+                pLastStepIndex = brain.step;
                 reachedGoal = true;
             }
-            else 
-            {
+            else {
                 RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-                if (hit && hit.transform.tag != "Finish")
-                {
+                if (hit && hit.transform.tag != "Finish") {
+                    pLastStepIndex = brain.step;
                     dead = true;
-                }else if(hit && hit.transform.tag == "Finish")
-                {
+                }
+                else if (hit && hit.transform.tag == "Finish") {
+                    pLastStepIndex = brain.step;
                     reachedGoal = true;
                 }
             }
         }
     }
 
-    public void CalculateFitness()
-    {
-        if (reachedGoal)
-        {//if the dot reached the goal then the fitness is based on the amount of steps it took to get there
-            fitness = 1.0f / (2.0f * timeAlive) + 10000.0f / (float)(brain.step * brain.step);
+    public void CalculateFitness() {
+        if (reachedGoal) {//if the dot reached the goal then the fitness is based on the amount of steps it took to get there
+            fitness = 1.0f / 16.0f + 10000.0f / (float)(brain.step * brain.step);
         }
-        else
-        {//if the dot didn't reach the goal then the fitness is based on how close it is to the goal
+        else {//if the dot didn't reach the goal then the fitness is based on how close it is to the goal
             float distanceToGoal = Vector2.Distance(pos, goal);
-            fitness = 1.0f / 16.0f + ((1/smallestDistance) + (timeAlive)) / (distanceToGoal * distanceToGoal * distanceToGoal);
+            fitness = 1.0f / 16.0f + ((1 / smallestDistance) + (timeAlive)) / (distanceToGoal * distanceToGoal * distanceToGoal);
         }
         timeAlive = 0f;
     }
 
-    public Dot GimmeBaby()
-    {
+    public Dot GimmeBaby() {
         Dot baby = new Dot(this.goal);
         baby.brain = brain.Clone();//babies have the same brain as their parents
         return baby;
