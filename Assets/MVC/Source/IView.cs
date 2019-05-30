@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface IView<T> {
     T Controller { get; set; }
-    Action OnControllerChange(T oldController, T newController);  
+    void OnControllerChange(T oldController, T newController);
 }
