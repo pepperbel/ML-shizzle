@@ -32,8 +32,7 @@ public class MVC_Test_Controller {
     }
 
 
-    public
-    MVC_Test_Controller(MVC_Test_Model model) {
+    public MVC_Test_Controller(MVC_Test_Model model) {
         this.model = model;
     }
     ~MVC_Test_Controller() {

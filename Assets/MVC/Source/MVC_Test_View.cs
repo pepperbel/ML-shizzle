@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controller> {
 
-    [SerializeField] bool positionLocked = true;
-    [SerializeField] bool rotationLocked = true;
-    [SerializeField] bool scaleLocked = true;
+    [SerializeField] bool positionLocked = false;
+    [SerializeField] bool rotationLocked = false;
+    [SerializeField] bool scaleLocked = false;
 
     /// <summary>
     /// Could be collapsed in a Container
@@ -82,14 +82,16 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
         if (oldController != null) {
 
         }
+        else Debug.Log(Utilities.Instance.DebugError(this.ToString(), "OnControllerChange", "OldController was Null!"));
         if (newController != null) {
-
+            Position();
+            Rotation();
+            Scale();
         }
+        else Debug.Log(Utilities.Instance.DebugError(ToString(), "OnControllerChange", "NewController was Null!"));
     }
     void Start() {
-        Position();
-        Rotation();
-        Scale();
+   
     }
     void Update() {
     
@@ -97,20 +99,21 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
     async void Position() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!positionLocked) {
+            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Position", "Update!"));
             Controller.PositionUpdate(PositionX, PositionY, PositionZ);
             await frame;
         }
     }
     async void Rotation() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
-        while (!positionLocked) {
+        while (!rotationLocked) {
             Controller.RotationUpdate(RotationX, RotationY, RotationZ);
             await frame;
         }
     }
     async void Scale() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
-        while (!positionLocked) {
+        while (!scaleLocked) {
             Controller.SclaeUpdate(ScaleX, ScaleY, ScaleZ);
             await frame;
         }
