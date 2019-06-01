@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 15afdfd9184d6e244ba6338b27d57b42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,12 +108,9 @@ MonoBehaviour:
   positionLocked: 0
   rotationLocked: 0
   scaleLocked: 0
-  postionX: 2.47
-  postionY: 2.27
-  postionZ: 1.67
-  rotationX: 0
-  rotationY: 0
-  rotationZ: 0
-  scaleX: 0
-  scaleY: 0
-  scaleZ: 0
+  posAmplitude: 0
+  posFrequency: 0
+  rotAmplitude: 0
+  rotFrequency: 0
+  scaleAmplitude: 0
+  scaleFrequency: 0

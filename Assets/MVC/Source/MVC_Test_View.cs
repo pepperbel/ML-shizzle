@@ -11,67 +11,46 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
     [SerializeField] bool scaleLocked = false;
 
     /// <summary>
-    /// Could be collapsed in a Container
-    /// maybe List<Array> or Vectors or Class/Struct
+    /// TODO: Clamp dis shit into container
     /// </summary>
-    [Header("Positions")]
-    [Range(-5,5)]
-    [SerializeField] private float postionX;
-    public float PositionX {
-        get { return postionX; }
-        set { postionX = value; }
+    [Header("Position")]
+    [Range(-10, 10)]
+    [SerializeField] float posAmplitude;
+    public float PosAmplitude {
+        get { return posAmplitude; }
+        set { posAmplitude = value; }
     }
-    [Range(-5, 5)]
-    [SerializeField] private float postionY;
-    public float PositionY {
-        get { return postionY; }
-        set { postionY = value; }
+    [Range(-10, 10)]
+    [SerializeField] float posFrequency;
+    public float PosFrequency {
+        get { return posFrequency; }
+        set { posFrequency = value; }
     }
-    [Range(-5, 5)]
-    [SerializeField] private float postionZ;
-    public float PositionZ {
-        get { return postionZ; }
-        set { postionZ = value; }
+    [Header("Rotation")]
+    [Range(-10, 10)]
+    [SerializeField] float rotAmplitude;
+    public float RotAmplitude {
+        get { return rotAmplitude; }
+        set { rotAmplitude = value; }
     }
-
-    [Header("Rotations")]
-    [Range(-5, 5)]
-    [SerializeField] private float rotationX;
-    public float RotationX {
-        get { return rotationX; }
-        set { rotationX = value; }
+    [Range(-10, 10)]
+    [SerializeField] float rotFrequency;
+    public float RotFrequency {
+        get { return rotFrequency; }
+        set { rotFrequency = value; }
     }
-    [Range(-5, 5)]
-    [SerializeField] private float rotationY;
-    public float RotationY {
-        get { return rotationY; }
-        set { rotationY = value; }
+    [Header("Scale")]
+    [Range(-10, 10)]
+    [SerializeField] float scaleAmplitude;
+    public float ScaleAmplitude {
+        get { return scaleAmplitude; }
+        set { scaleAmplitude = value; }
     }
-    [Range(-5, 5)]
-    [SerializeField] private float rotationZ;
-    public float RotationZ {
-        get { return rotationZ; }
-        set { rotationZ = value; }
-    }
-
-    [Header("Scales")]
-    [Range(-5, 5)]
-    [SerializeField] private float scaleX;
-    public float ScaleX {
-        get { return scaleX; }
-        set { scaleX = value; }
-    }
-    [Range(-5, 5)]
-    [SerializeField] private float scaleY;
-    public float ScaleY {
-        get { return scaleY; }
-        set { scaleY = value; }
-    }
-    [Range(-5, 5)]
-    [SerializeField] private float scaleZ;
-    public float ScaleZ {
-        get { return scaleZ; }
-        set { scaleZ = value; }
+    [Range(-10, 10)]
+    [SerializeField] float scaleFrequency;
+    public float ScaleFrequency {
+        get { return scaleFrequency; }
+        set { scaleFrequency = value; }
     }
 
     public MVC_Test_Controller Controller {
@@ -100,21 +79,23 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!positionLocked) {
             Debug.Log(Utilities.Instance.DebugLog(ToString(), "Position", "Update!"));
-            Controller.PositionUpdate(PositionX, PositionY, PositionZ);
+            Controller.PositionUpdate(PosAmplitude, PosFrequency);
             await frame;
         }
     }
     async void Rotation() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!rotationLocked) {
-            Controller.RotationUpdate(RotationX, RotationY, RotationZ);
+            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Rotation", "Update!"));
+            Controller.RotationUpdate(RotAmplitude, RotFrequency);
             await frame;
         }
     }
     async void Scale() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!scaleLocked) {
-            Controller.SclaeUpdate(ScaleX, ScaleY, ScaleZ);
+            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Scale", "Update!"));
+            Controller.SclaeUpdate(ScaleAmplitude, ScaleFrequency);
             await frame;
         }
     }
