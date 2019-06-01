@@ -61,16 +61,17 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
         if (oldController != null) {
 
         }
-        else Debug.Log(Utilities.Instance.DebugError(this.ToString(), "OnControllerChange", "OldController was Null!"));
+        else Debug.Log(Ultra.Utilities.Instance.DebugErrorString(this.ToString(), "OnControllerChange", "OldController was Null!"));
         if (newController != null) {
             Position();
             Rotation();
             Scale();
         }
-        else Debug.Log(Utilities.Instance.DebugError(ToString(), "OnControllerChange", "NewController was Null!"));
+        else Debug.Log(Ultra.Utilities.Instance.DebugErrorString(ToString(), "OnControllerChange", "NewController was Null!"));
     }
-    void Start() {
-   
+    async void Start() {
+        await new WaitForSeconds(3);
+        Ultra.Utilities.Instance.DebugLogOnScreen("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", 5f);
     }
     void Update() {
     
@@ -78,7 +79,7 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
     async void Position() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!positionLocked) {
-            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Position", "Update!"));
+            Ultra.Utilities.Instance.DebugLogOnScreen(Ultra.Utilities.Instance.DebugLogString(ToString(), "Position", Controller.GameObject.transform.position.ToString()));
             Controller.PositionUpdate(PosAmplitude, PosFrequency);
             await frame;
         }
@@ -86,15 +87,15 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
     async void Rotation() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!rotationLocked) {
-            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Rotation", "Update!"));
             Controller.RotationUpdate(RotAmplitude, RotFrequency);
+            Ultra.Utilities.Instance.DebugLogOnScreen(Ultra.Utilities.Instance.DebugLogString(ToString(), "Rotation", Controller.GameObject.transform.rotation.eulerAngles.ToString()));
             await frame;
         }
     }
     async void Scale() {
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         while (!scaleLocked) {
-            Debug.Log(Utilities.Instance.DebugLog(ToString(), "Scale", "Update!"));
+            Ultra.Utilities.Instance.DebugLogOnScreen(Ultra.Utilities.Instance.DebugLogString(ToString(), "Scale", Controller.GameObject.transform.localScale.ToString()));
             Controller.SclaeUpdate(ScaleAmplitude, ScaleFrequency);
             await frame;
         }
