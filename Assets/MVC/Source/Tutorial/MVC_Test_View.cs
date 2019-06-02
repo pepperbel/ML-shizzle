@@ -61,7 +61,7 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
         if (oldController != null) {
 
         }
-        else Debug.Log(Ultra.Utilities.Instance.DebugErrorString(this.ToString(), "OnControllerChange", "OldController was Null!"));
+        else Debug.Log(Ultra.Utilities.Instance.DebugErrorString(ToString(), "OnControllerChange", "OldController was Null!"));
         if (newController != null) {
             Position();
             Rotation();
@@ -69,9 +69,8 @@ public class MVC_Test_View : View<MVC_Test_Controller>, IView<MVC_Test_Controlle
         }
         else Debug.Log(Ultra.Utilities.Instance.DebugErrorString(ToString(), "OnControllerChange", "NewController was Null!"));
     }
-    async void Start() {
-        await new WaitForSeconds(3);
-        Ultra.Utilities.Instance.DebugLogOnScreen("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", 5f);
+    void Start() {
+
     }
     void Update() {
     
